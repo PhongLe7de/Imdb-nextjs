@@ -8,7 +8,7 @@ interface IHomeProps {
 }
 
 async function Home({ searchParams }: IHomeProps) {
-  const genre = searchParams?.genre || "fetchTrending";
+  const genre = await searchParams?.genre || "fetchTrending";
   const endpoint =
     genre === "fetchTopRated" ? "/movie/top_rated" : "/trending/all/week";
 
