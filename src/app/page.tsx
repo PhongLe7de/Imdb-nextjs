@@ -1,10 +1,30 @@
+const API_KEY = process.env.TMDB_API_KEY;
 
-import React from 'react'
-
-function Home() {
-  return (
-    <div>Home</div>
-  )
+interface IHomeProps {
+  searchParams: Record<string, string | undefined>;
 }
 
-export default Home
+async function Home({ searchParams }: IHomeProps) {
+  const genre = searchParams?.genre || "fetchTrending";
+  try {
+    const endpoint =
+      genre === "fetchTopRated" ? "/movie/top_rated" : "/trending/all/week";
+
+    const res = await fetch(
+      `https://api.themoviedb.org/3${endpoint}?api_key=${API_KEY}&language=en-US&page=1`
+    );
+
+    if (!res.ok) {
+      throw new Error(`Failed to fetch data: ${res.statusText}`);
+    }
+
+    const data = await res.json();
+    const results = data.results;
+
+    return <div>Home</div>;
+  } catch (error) {
+    return <div>Failed to load movies. Please try again later.</div>;
+  }
+}
+
+export default Home;
